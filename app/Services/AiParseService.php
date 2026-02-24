@@ -69,42 +69,60 @@ Input user: "{$input}"
 PROMPT;
 
         try {
-            $url = $this->endpoint . $this->model . ':generateContent?key=' . $this->apiKey;
+            $url = $this->endpoint . $this->model . ':generateContent';
 
-            $response = Http::timeout(30)->post($url, [
-                'contents' => [
-                    [
-                        'parts' => [
-                            ['text' => $prompt],
+            Log::info('AI Parse: Sending request', ['url' => $url, 'model' => $this->model, 'input' => $input]);
+
+            $response = Http::timeout(30)
+                ->withHeaders([
+                    'x-goog-api-key' => $this->apiKey,
+                    'Content-Type' => 'application/json',
+                ])
+                ->post($url, [
+                    'contents' => [
+                        [
+                            'parts' => [
+                                ['text' => $prompt],
+                            ],
                         ],
                     ],
-                ],
-                'generationConfig' => [
-                    'temperature' => 0.1,
-                    'topP' => 0.8,
-                    'maxOutputTokens' => 500,
-                ],
-            ]);
+                    'generationConfig' => [
+                        'temperature' => 0.1,
+                        'topP' => 0.8,
+                        'maxOutputTokens' => 1024,
+                        'responseMimeType' => 'application/json',
+                    ],
+                ]);
+
+            Log::info('AI Parse: Response status', ['status' => $response->status()]);
 
             if ($response->successful()) {
                 $text = $response->json('candidates.0.content.parts.0.text', '');
 
-                // Clean up response - remove markdown code blocks if present
+                Log::info('AI Parse: Raw AI text', ['text' => substr($text, 0, 500)]);
+
+                // Clean up response
                 $text = preg_replace('/```json\s*/', '', $text);
                 $text = preg_replace('/```\s*/', '', $text);
+                // Remove control characters that break json_decode
+                $text = preg_replace('/[\x00-\x1F\x7F]/', ' ', $text);
                 $text = trim($text);
+
+                Log::info('AI Parse: Cleaned text', ['text' => $text]);
 
                 $parsed = json_decode($text, true);
 
                 if (json_last_error() === JSON_ERROR_NONE && $parsed) {
-                    return $this->validateParsedData($parsed);
+                    $result = $this->validateParsedData($parsed);
+                    Log::info('AI Parse: Final result', $result);
+                    return $result;
                 }
 
-                Log::warning('AI Parse: Invalid JSON response', ['text' => $text]);
+                Log::warning('AI Parse: Invalid JSON response', ['text' => $text, 'json_error' => json_last_error_msg()]);
             } else {
                 Log::error('AI Parse: API error', [
                     'status' => $response->status(),
-                    'body' => $response->body(),
+                    'body' => substr($response->body(), 0, 500),
                 ]);
             }
         } catch (\Exception $e) {
@@ -112,6 +130,7 @@ PROMPT;
         }
 
         // Fallback: return basic structure with the input as title
+        Log::warning('AI Parse: Using fallback');
         return $this->fallbackParse($input);
     }
 
