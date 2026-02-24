@@ -32,8 +32,11 @@ const formatDeadline = (deadline) => {
     if (!deadline) return null;
     const date = new Date(deadline);
     const now = new Date();
-    const diffTime = date - now;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    // Compare calendar dates, not timestamps
+    const deadlineDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const diffDays = Math.round((deadlineDate - todayDate) / (1000 * 60 * 60 * 24));
 
     const formatted = date.toLocaleDateString('id-ID', {
         day: 'numeric',
@@ -56,14 +59,12 @@ const deadline = formatDeadline(props.task.deadline);
     <div class="task-card" :class="{ 'is-completed': task.status === 'completed' }">
         <div class="task-card-inner">
             <!-- Checkbox -->
-            <button
-                @click="$emit('toggle-complete', task.id)"
-                class="task-checkbox"
-                :class="{ checked: task.status === 'completed' }"
-            >
-                <svg v-if="task.status === 'completed'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3">
-                    <polyline points="20 6 9 17 4 12"/>
+            <button @click="$emit('toggle-complete', task.id)" class="task-checkbox"
+                :class="{ checked: task.status === 'completed' }">
+                <svg v-if="task.status === 'completed'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                    class="w-3 h-3">
+                    <polyline points="20 6 9 17 4 12" />
                 </svg>
             </button>
 
@@ -74,10 +75,10 @@ const deadline = formatDeadline(props.task.deadline);
                         {{ task.title }}
                     </h3>
                     <Link :href="route('tasks.edit', task.id)" class="task-edit-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
-                            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
-                            <path d="m15 5 4 4"/>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                            <path d="m15 5 4 4" />
                         </svg>
                     </Link>
                 </div>
@@ -86,32 +87,26 @@ const deadline = formatDeadline(props.task.deadline);
 
                 <div class="task-meta">
                     <!-- Category Badge -->
-                    <span
-                        v-if="task.category"
-                        class="task-badge category-badge"
-                        :style="{ backgroundColor: task.category.color + '20', color: task.category.color, borderColor: task.category.color + '40' }"
-                    >
+                    <span v-if="task.category" class="task-badge category-badge"
+                        :style="{ backgroundColor: task.category.color + '20', color: task.category.color, borderColor: task.category.color + '40' }">
                         {{ task.category.name }}
                     </span>
 
                     <!-- Priority Badge -->
-                    <span
-                        class="task-badge"
-                        :style="{
-                            backgroundColor: priorityColors[task.priority].bg,
-                            color: priorityColors[task.priority].text,
-                            borderColor: priorityColors[task.priority].border
-                        }"
-                    >
+                    <span class="task-badge" :style="{
+                        backgroundColor: priorityColors[task.priority].bg,
+                        color: priorityColors[task.priority].text,
+                        borderColor: priorityColors[task.priority].border
+                    }">
                         {{ priorityLabels[task.priority] }}
                     </span>
 
                     <!-- Deadline -->
                     <span v-if="deadline" class="task-deadline" :class="{ 'is-overdue': deadline.isOverdue }">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5">
-                            <circle cx="12" cy="12" r="10"/>
-                            <polyline points="12 6 12 12 16 14"/>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
                         </svg>
                         {{ deadline.label }}
                     </span>
