@@ -20,7 +20,6 @@ const form = useForm({
 const aiParsed = ref(false);
 
 const handleAiParsed = (data) => {
-    console.log('AI Parsed Data received:', data);
     form.title = data.title || '';
     form.description = data.description || '';
     form.original_input = data.original_input || '';
@@ -28,7 +27,6 @@ const handleAiParsed = (data) => {
     form.priority = data.priority || 'medium';
     form.deadline = data.deadline ? formatDatetimeLocal(data.deadline) : '';
     aiParsed.value = true;
-    console.log('Form after AI fill:', { title: form.title, category_id: form.category_id, priority: form.priority, deadline: form.deadline });
 };
 
 const formatDatetimeLocal = (dateStr) => {

@@ -37,8 +37,6 @@ const parseInput = async () => {
             input: input.value,
         });
 
-        console.log('AI Parse Response:', response.data);
-
         if (response.data.success) {
             emit('parsed', {
                 ...response.data.data,
@@ -47,7 +45,6 @@ const parseInput = async () => {
         }
     } catch (err) {
         error.value = err.response?.data?.message || 'Gagal memproses input. Silakan coba lagi.';
-        console.error('AI Parse error:', err.response?.data || err);
     } finally {
         isLoading.value = false;
     }
