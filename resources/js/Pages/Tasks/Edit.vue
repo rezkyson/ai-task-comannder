@@ -1,18 +1,14 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, useForm, router } from '@inertiajs/vue3';
+import { ArrowLeft, Trash2, Loader2, Sparkles } from 'lucide-vue-next';
 
-const props = defineProps({
-    task: Object,
-    categories: Array,
-});
+const props = defineProps({ task: Object, categories: Array });
 
-const formatDatetimeLocal = (dateStr) => {
-    if (!dateStr) return '';
-    const date = new Date(dateStr);
-    const offset = date.getTimezoneOffset();
-    const local = new Date(date.getTime() - offset * 60 * 1000);
-    return local.toISOString().slice(0, 16);
+const fmtDT = (s) => {
+    if (!s) return '';
+    const d = new Date(s);
+    return new Date(d.getTime() - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 16);
 };
 
 const form = useForm({
@@ -21,125 +17,117 @@ const form = useForm({
     category_id: props.task.category_id || '',
     priority: props.task.priority || 'medium',
     status: props.task.status || 'pending',
-    deadline: formatDatetimeLocal(props.task.deadline),
+    deadline: fmtDT(props.task.deadline),
 });
 
-const submit = () => {
-    form.put(route('tasks.update', props.task.id));
-};
+const submit = () => form.put(route('tasks.update', props.task.id));
+const deleteTask = () => { if (confirm('Yakin ingin menghapus?')) router.delete(route('tasks.destroy', props.task.id)); };
 
-const deleteTask = () => {
-    if (confirm('Yakin ingin menghapus tugas ini?')) {
-        router.delete(route('tasks.destroy', props.task.id));
-    }
-};
+const inputClass = 'w-full px-3 py-2 text-sm bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-violet-400 dark:focus:border-violet-500 focus:ring-1 focus:ring-violet-100 dark:focus:ring-violet-500/20 outline-none transition-colors';
 </script>
 
 <template>
 
     <Head :title="'Edit: ' + task.title" />
-
     <AuthenticatedLayout>
         <template #header>
-            <div class="flex justify-between items-center">
-                <h2 class="text-xl font-bold text-slate-800 dark:text-white">Edit Tugas</h2>
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Edit Tugas</h2>
                 <Link :href="route('tasks.index')"
-                    class="text-sm font-medium text-indigo-500 hover:text-indigo-700 dark:hover:text-indigo-400">←
-                    Kembali</Link>
+                    class="flex items-center gap-1 text-[13px] text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
+                    <ArrowLeft :size="14" /> Kembali
+                </Link>
             </div>
         </template>
 
-        <div class="py-6">
-            <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+        <div class="py-5">
+            <div class="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 space-y-4">
+
                 <!-- Original Input -->
                 <div v-if="task.original_input"
-                    class="bg-gradient-to-br from-blue-50 to-violet-50 dark:from-indigo-500/10 dark:to-purple-500/10 border border-indigo-200 dark:border-indigo-500/30 rounded-xl px-5 py-4 mb-5">
-                    <div
-                        class="text-xs font-semibold text-indigo-500 dark:text-indigo-400 uppercase tracking-wider mb-1">
-                        Input
-                        asli dari AI:</div>
-                    <div class="text-sm text-indigo-700 dark:text-indigo-300 italic">"{{ task.original_input }}"</div>
+                    class="flex items-start gap-2 px-3.5 py-2.5 bg-violet-50/50 dark:bg-violet-500/5 border border-violet-100 dark:border-violet-500/15 rounded-lg">
+                    <Sparkles :size="14" class="text-violet-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                        <p
+                            class="text-[10px] font-semibold text-violet-500 dark:text-violet-400 uppercase tracking-wider">
+                            Input
+                            AI</p>
+                        <p class="text-[13px] text-violet-700 dark:text-violet-300 italic mt-0.5">"{{
+                            task.original_input }}"
+                        </p>
+                    </div>
                 </div>
 
-                <!-- Edit Form -->
+                <!-- Form -->
                 <form @submit.prevent="submit"
-                    class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="sm:col-span-2 flex flex-col gap-1.5">
-                            <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Judul Tugas <span
-                                    class="text-red-500">*</span></label>
-                            <input v-model="form.title" type="text" required
-                                class="w-full px-3.5 py-2.5 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:border-indigo-400 dark:focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all" />
-                            <p v-if="form.errors.title" class="text-xs text-red-500">{{ form.errors.title }}</p>
-                        </div>
-
-                        <div class="sm:col-span-2 flex flex-col gap-1.5">
-                            <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Deskripsi</label>
-                            <textarea v-model="form.description" rows="3"
-                                class="w-full px-3.5 py-2.5 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:border-indigo-400 dark:focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all font-[inherit] resize-none"></textarea>
-                            <p v-if="form.errors.description" class="text-xs text-red-500">{{ form.errors.description }}
+                    class="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-lg p-4">
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-[13px] font-medium text-gray-600 dark:text-gray-300 mb-1">Judul
+                                <span class="text-red-400">*</span></label>
+                            <input v-model="form.title" type="text" :class="inputClass" required />
+                            <p v-if="form.errors.title" class="text-[11px] text-red-500 mt-1">{{ form.errors.title }}
                             </p>
                         </div>
 
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Kategori</label>
-                            <select v-model="form.category_id"
-                                class="w-full px-3.5 py-2.5 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none cursor-pointer">
-                                <option value="">Pilih Kategori</option>
-                                <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
-                            </select>
+                        <div>
+                            <label
+                                class="block text-[13px] font-medium text-gray-600 dark:text-gray-300 mb-1">Deskripsi</label>
+                            <textarea v-model="form.description" :class="inputClass + ' resize-none'"
+                                rows="2"></textarea>
                         </div>
 
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Prioritas</label>
-                            <select v-model="form.priority"
-                                class="w-full px-3.5 py-2.5 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none cursor-pointer">
-                                <option value="low">🟢 Rendah</option>
-                                <option value="medium">🟡 Sedang</option>
-                                <option value="high">🟠 Tinggi</option>
-                                <option value="urgent">🔴 Urgen</option>
-                            </select>
-                        </div>
-
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Status</label>
-                            <select v-model="form.status"
-                                class="w-full px-3.5 py-2.5 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none cursor-pointer">
-                                <option value="pending">Belum Mulai</option>
-                                <option value="in_progress">Sedang Dikerjakan</option>
-                                <option value="completed">Selesai</option>
-                                <option value="cancelled">Dibatalkan</option>
-                            </select>
-                        </div>
-
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Deadline</label>
-                            <input v-model="form.deadline" type="datetime-local"
-                                class="w-full px-3.5 py-2.5 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none transition-all" />
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label
+                                    class="block text-[13px] font-medium text-gray-600 dark:text-gray-300 mb-1">Kategori</label>
+                                <select v-model="form.category_id" :class="inputClass + ' cursor-pointer'">
+                                    <option value="">Pilih...</option>
+                                    <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-[13px] font-medium text-gray-600 dark:text-gray-300 mb-1">Prioritas</label>
+                                <select v-model="form.priority" :class="inputClass + ' cursor-pointer'">
+                                    <option value="low">Rendah</option>
+                                    <option value="medium">Sedang</option>
+                                    <option value="high">Tinggi</option>
+                                    <option value="urgent">Urgen</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-[13px] font-medium text-gray-600 dark:text-gray-300 mb-1">Status</label>
+                                <select v-model="form.status" :class="inputClass + ' cursor-pointer'">
+                                    <option value="pending">Belum Mulai</option>
+                                    <option value="in_progress">Dikerjakan</option>
+                                    <option value="completed">Selesai</option>
+                                    <option value="cancelled">Dibatalkan</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-[13px] font-medium text-gray-600 dark:text-gray-300 mb-1">Deadline</label>
+                                <input v-model="form.deadline" type="datetime-local" :class="inputClass" />
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Actions -->
                     <div
-                        class="flex flex-col sm:flex-row justify-between items-center gap-3 mt-6 pt-5 border-t border-slate-100 dark:border-slate-700">
+                        class="flex items-center justify-between mt-5 pt-4 border-t border-gray-100 dark:border-gray-800">
                         <button type="button" @click="deleteTask"
-                            class="inline-flex items-center gap-1.5 px-4 py-2 bg-white dark:bg-slate-700 text-red-500 border border-red-200 dark:border-red-500/30 rounded-xl text-sm cursor-pointer hover:bg-red-50 dark:hover:bg-red-500/10 transition-all">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="w-4 h-4">
-                                <path d="M3 6h18" />
-                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                            </svg>
-                            Hapus
+                            class="flex items-center gap-1 px-3 py-1.5 text-[13px] text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-md transition-colors cursor-pointer">
+                            <Trash2 :size="14" /> Hapus
                         </button>
-                        <div class="flex gap-3">
+                        <div class="flex gap-2">
                             <Link :href="route('tasks.index')"
-                                class="px-5 py-2.5 bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600 rounded-xl text-sm hover:bg-slate-100 dark:hover:bg-slate-600 transition-all">
+                                class="px-3.5 py-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
                                 Batal</Link>
                             <button type="submit" :disabled="form.processing"
-                                class="px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-sm font-semibold rounded-xl hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-200 dark:hover:shadow-indigo-900/50 transition-all disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none">
-                                {{ form.processing ? 'Menyimpan...' : 'Simpan Perubahan' }}
+                                class="flex items-center gap-1.5 px-4 py-2 bg-violet-600 hover:bg-violet-700 disabled:bg-gray-200 dark:disabled:bg-gray-700 text-white disabled:text-gray-400 text-sm font-medium rounded-md transition-colors">
+                                <Loader2 v-if="form.processing" :size="14" class="animate-spin" />
+                                {{ form.processing ? 'Menyimpan...' : 'Simpan' }}
                             </button>
                         </div>
                     </div>

@@ -1,6 +1,7 @@
 <script setup>
 import { usePage } from '@inertiajs/vue3';
 import { ref, watch, computed } from 'vue';
+import { CheckCircle2, XCircle } from 'lucide-vue-next';
 
 const flash = computed(() => usePage().props.flash);
 const show = ref(false);
@@ -24,26 +25,17 @@ watch(flash, (val) => {
 </script>
 
 <template>
-    <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 translate-x-full"
-        enter-to-class="opacity-100 translate-x-0" leave-active-class="transition-all duration-300 ease-in"
-        leave-from-class="opacity-100 translate-x-0" leave-to-class="opacity-0 translate-x-full">
+    <Transition enter-active-class="transition-all duration-200 ease-out"
+        enter-from-class="opacity-0 translate-y-[-8px]" enter-to-class="opacity-100 translate-y-0"
+        leave-active-class="transition-all duration-150 ease-in" leave-from-class="opacity-100"
+        leave-to-class="opacity-0 translate-y-[-8px]">
         <div v-if="show" @click="show = false"
-            class="fixed top-5 right-5 z-[9999] flex items-center gap-2.5 px-5 py-3.5 rounded-xl text-sm font-medium shadow-lg cursor-pointer max-w-sm"
+            class="fixed top-3 right-3 z-[9999] flex items-center gap-2 px-4 py-2.5 rounded-lg text-[13px] font-medium shadow-md cursor-pointer max-w-xs"
             :class="type === 'success'
-                ? 'bg-green-50 dark:bg-green-500/15 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-500/30 shadow-green-100 dark:shadow-black/20'
-                : 'bg-red-50 dark:bg-red-500/15 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-500/30 shadow-red-100 dark:shadow-black/20'">
-            <svg v-if="type === 'success'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="w-5 h-5 flex-shrink-0">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                <polyline points="22 4 12 14.01 9 11.01" />
-            </svg>
-            <svg v-else xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 flex-shrink-0">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="15" y1="9" x2="9" y2="15" />
-                <line x1="9" y1="9" x2="15" y2="15" />
-            </svg>
+                ? 'bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-500/20'
+                : 'bg-red-50 dark:bg-red-500/15 text-red-700 dark:text-red-400 border border-red-200/80 dark:border-red-500/20'">
+            <CheckCircle2 v-if="type === 'success'" :size="16" />
+            <XCircle v-else :size="16" />
             <span>{{ message }}</span>
         </div>
     </Transition>
