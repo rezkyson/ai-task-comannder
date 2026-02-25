@@ -24,8 +24,14 @@ watch(flash, (val) => {
 </script>
 
 <template>
-    <Transition name="toast">
-        <div v-if="show" class="toast" :class="'toast-' + type" @click="show = false">
+    <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 translate-x-full"
+        enter-to-class="opacity-100 translate-x-0" leave-active-class="transition-all duration-300 ease-in"
+        leave-from-class="opacity-100 translate-x-0" leave-to-class="opacity-0 translate-x-full">
+        <div v-if="show" @click="show = false"
+            class="fixed top-5 right-5 z-[9999] flex items-center gap-2.5 px-5 py-3.5 rounded-xl text-sm font-medium shadow-lg cursor-pointer max-w-sm"
+            :class="type === 'success'
+                ? 'bg-green-50 dark:bg-green-500/15 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-500/30 shadow-green-100 dark:shadow-black/20'
+                : 'bg-red-50 dark:bg-red-500/15 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-500/30 shadow-red-100 dark:shadow-black/20'">
             <svg v-if="type === 'success'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="w-5 h-5 flex-shrink-0">
@@ -42,52 +48,3 @@ watch(flash, (val) => {
         </div>
     </Transition>
 </template>
-
-<style scoped>
-.toast {
-    position: fixed;
-    top: 1.25rem;
-    right: 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 0.625rem;
-    padding: 0.875rem 1.25rem;
-    border-radius: 0.75rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    cursor: pointer;
-    z-index: 9999;
-    max-width: 400px;
-}
-
-.toast-success {
-    background: #f0fdf4;
-    color: #16a34a;
-    border: 1px solid #bbf7d0;
-}
-
-.toast-error {
-    background: #fef2f2;
-    color: #dc2626;
-    border: 1px solid #fecaca;
-}
-
-.toast-enter-active {
-    transition: all 0.3s ease;
-}
-
-.toast-leave-active {
-    transition: all 0.3s ease;
-}
-
-.toast-enter-from {
-    opacity: 0;
-    transform: translateX(100%);
-}
-
-.toast-leave-to {
-    opacity: 0;
-    transform: translateX(100%);
-}
-</style>

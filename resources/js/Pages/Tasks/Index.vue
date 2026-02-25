@@ -49,32 +49,26 @@ const toggleComplete = (taskId) => {
     });
 };
 
-const deleteTask = (taskId) => {
-    if (confirm('Yakin ingin menghapus task ini?')) {
-        router.delete(route('tasks.destroy', taskId), {
-            preserveScroll: true,
-        });
-    }
-};
-
 const hasActiveFilters = () => {
     return search.value || status.value || categoryId.value || priority.value;
 };
 </script>
 
 <template>
+
     <Head title="Tugas Saya" />
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="header-row">
-                <h2 class="page-title">Tugas Saya</h2>
-                <Link :href="route('tasks.create')" class="create-btn">
+            <div class="flex justify-between items-center">
+                <h2 class="text-xl font-bold text-slate-800 dark:text-white">Tugas Saya</h2>
+                <Link :href="route('tasks.create')"
+                    class="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-sm font-semibold rounded-xl hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-200 dark:hover:shadow-indigo-900/50 transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
-                        <circle cx="12" cy="12" r="10"/>
-                        <path d="M8 12h8"/>
-                        <path d="M12 8v8"/>
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M8 12h8" />
+                        <path d="M12 8v8" />
                     </svg>
                     Tambah Tugas
                 </Link>
@@ -84,278 +78,85 @@ const hasActiveFilters = () => {
         <div class="py-6">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <!-- Filters -->
-                <div class="filters-bar">
-                    <div class="search-box">
+                <div class="flex flex-col sm:flex-row flex-wrap gap-3 mb-6">
+                    <div class="relative flex-1 min-w-[200px]">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon">
-                            <circle cx="11" cy="11" r="8"/>
-                            <path d="m21 21-4.3-4.3"/>
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400">
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="m21 21-4.3-4.3" />
                         </svg>
-                        <input v-model="search" type="text" placeholder="Cari tugas..." class="search-input" />
+                        <input v-model="search" type="text" placeholder="Cari tugas..."
+                            class="w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:border-indigo-400 dark:focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all" />
                     </div>
-
-                    <select v-model="status" @change="applyFilters" class="filter-select">
+                    <select v-model="status" @change="applyFilters"
+                        class="px-3 py-2.5 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none cursor-pointer">
                         <option value="">Semua Status</option>
                         <option value="pending">Belum Mulai</option>
                         <option value="in_progress">Sedang Dikerjakan</option>
                         <option value="completed">Selesai</option>
                         <option value="cancelled">Dibatalkan</option>
                     </select>
-
-                    <select v-model="categoryId" @change="applyFilters" class="filter-select">
+                    <select v-model="categoryId" @change="applyFilters"
+                        class="px-3 py-2.5 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none cursor-pointer">
                         <option value="">Semua Kategori</option>
-                        <option v-for="cat in categories" :key="cat.id" :value="cat.id">
-                            {{ cat.name }}
-                        </option>
+                        <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
                     </select>
-
-                    <select v-model="priority" @change="applyFilters" class="filter-select">
+                    <select v-model="priority" @change="applyFilters"
+                        class="px-3 py-2.5 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none cursor-pointer">
                         <option value="">Semua Prioritas</option>
                         <option value="urgent">Urgen</option>
                         <option value="high">Tinggi</option>
                         <option value="medium">Sedang</option>
                         <option value="low">Rendah</option>
                     </select>
-
-                    <button v-if="hasActiveFilters()" @click="clearFilters" class="clear-filters-btn">
+                    <button v-if="hasActiveFilters()" @click="clearFilters"
+                        class="px-3.5 py-2.5 bg-red-50 dark:bg-red-500/10 text-red-500 border border-red-200 dark:border-red-500/30 rounded-xl text-sm font-medium hover:bg-red-100 dark:hover:bg-red-500/20 cursor-pointer transition-all">
                         Reset
                     </button>
                 </div>
 
                 <!-- Task List -->
-                <div v-if="tasks.data && tasks.data.length > 0" class="task-list">
-                    <TaskCard
-                        v-for="task in tasks.data"
-                        :key="task.id"
-                        :task="task"
-                        @toggle-complete="toggleComplete"
-                    />
+                <div v-if="tasks.data && tasks.data.length > 0" class="flex flex-col gap-3">
+                    <TaskCard v-for="task in tasks.data" :key="task.id" :task="task"
+                        @toggle-complete="toggleComplete" />
                 </div>
 
                 <!-- Empty State -->
-                <div v-else class="empty-state">
-                    <div class="empty-icon">
+                <div v-else class="text-center py-12">
+                    <div class="flex justify-center mb-4 text-indigo-200 dark:text-indigo-800">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16">
-                            <path d="M12 2a4 4 0 0 1 4 4v1a3 3 0 0 1 3 3v1a2 2 0 0 1-2 2h-1v4a4 4 0 0 1-8 0v-4H7a2 2 0 0 1-2-2v-1a3 3 0 0 1 3-3V6a4 4 0 0 1 4-4z"/>
-                            <circle cx="9" cy="13" r="1"/>
-                            <circle cx="15" cy="13" r="1"/>
+                            <path
+                                d="M12 2a4 4 0 0 1 4 4v1a3 3 0 0 1 3 3v1a2 2 0 0 1-2 2h-1v4a4 4 0 0 1-8 0v-4H7a2 2 0 0 1-2-2v-1a3 3 0 0 1 3-3V6a4 4 0 0 1 4-4z" />
+                            <circle cx="9" cy="13" r="1" />
+                            <circle cx="15" cy="13" r="1" />
                         </svg>
                     </div>
-                    <h3 class="empty-title">Belum ada tugas</h3>
-                    <p class="empty-text">Mulai buat tugas pertamamu dengan AI! Cukup ketik dengan bahasa sehari-hari.</p>
-                    <Link :href="route('tasks.create')" class="create-btn" style="margin-top: 1rem;">
+                    <h3 class="text-lg font-semibold text-slate-500 dark:text-slate-400 mb-1">Belum ada tugas</h3>
+                    <p class="text-sm text-slate-400 dark:text-slate-500 max-w-xs mx-auto">Mulai buat tugas pertamamu
+                        dengan AI!
+                    </p>
+                    <Link :href="route('tasks.create')"
+                        class="inline-flex mt-4 px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-sm font-semibold rounded-xl hover:shadow-lg transition-all">
                         Buat Tugas Pertama
                     </Link>
                 </div>
 
                 <!-- Pagination -->
-                <div v-if="tasks.links && tasks.last_page > 1" class="pagination">
+                <div v-if="tasks.links && tasks.last_page > 1" class="flex justify-center gap-1 mt-8">
                     <template v-for="link in tasks.links" :key="link.label">
-                        <Link
-                            v-if="link.url"
-                            :href="link.url"
-                            class="page-link"
-                            :class="{ active: link.active }"
-                            v-html="link.label"
-                        />
-                        <span v-else class="page-link disabled" v-html="link.label" />
+                        <Link v-if="link.url" :href="link.url"
+                            class="px-3 py-1.5 border rounded-lg text-xs transition-all"
+                            :class="link.active
+                                ? 'bg-indigo-500 text-white border-indigo-500'
+                                : 'border-slate-200 dark:border-slate-600 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'" v-html="link.label" />
+                        <span v-else
+                            class="px-3 py-1.5 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-300 dark:text-slate-600"
+                            v-html="link.label" />
                     </template>
                 </div>
             </div>
         </div>
     </AuthenticatedLayout>
 </template>
-
-<style scoped>
-.header-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.page-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #1e293b;
-}
-
-.create-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.5rem 1rem;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    color: white;
-    font-size: 0.875rem;
-    font-weight: 600;
-    border-radius: 0.75rem;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    border: none;
-    cursor: pointer;
-}
-
-.create-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
-}
-
-.filters-bar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-    align-items: center;
-}
-
-.search-box {
-    position: relative;
-    flex: 1;
-    min-width: 200px;
-}
-
-.search-icon {
-    position: absolute;
-    left: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 1.1rem;
-    height: 1.1rem;
-    color: #94a3b8;
-}
-
-.search-input {
-    width: 100%;
-    padding: 0.5rem 0.75rem 0.5rem 2.5rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.625rem;
-    font-size: 0.875rem;
-    outline: none;
-    transition: all 0.2s ease;
-    background: white;
-}
-
-.search-input:focus {
-    border-color: #818cf8;
-    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15);
-}
-
-.filter-select {
-    padding: 0.5rem 2rem 0.5rem 0.75rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.625rem;
-    font-size: 0.85rem;
-    outline: none;
-    background: white;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    color: #475569;
-}
-
-.filter-select:focus {
-    border-color: #818cf8;
-    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15);
-}
-
-.clear-filters-btn {
-    padding: 0.5rem 0.875rem;
-    background: #fee2e2;
-    color: #dc2626;
-    border: 1px solid #fecaca;
-    border-radius: 0.625rem;
-    font-size: 0.85rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.clear-filters-btn:hover {
-    background: #fecaca;
-}
-
-.task-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.empty-state {
-    text-align: center;
-    padding: 3rem 1rem;
-}
-
-.empty-icon {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1rem;
-    color: #c7d2fe;
-}
-
-.empty-title {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #475569;
-    margin-bottom: 0.5rem;
-}
-
-.empty-text {
-    font-size: 0.875rem;
-    color: #94a3b8;
-    max-width: 320px;
-    margin: 0 auto;
-}
-
-.pagination {
-    display: flex;
-    justify-content: center;
-    gap: 0.25rem;
-    margin-top: 2rem;
-}
-
-.page-link {
-    padding: 0.375rem 0.75rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.5rem;
-    font-size: 0.8rem;
-    color: #475569;
-    text-decoration: none;
-    transition: all 0.2s ease;
-}
-
-.page-link:hover:not(.disabled):not(.active) {
-    background: #f1f5f9;
-    border-color: #cbd5e1;
-}
-
-.page-link.active {
-    background: #6366f1;
-    color: white;
-    border-color: #6366f1;
-}
-
-.page-link.disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-@media (max-width: 640px) {
-    .header-row {
-        flex-direction: column;
-        gap: 0.75rem;
-        align-items: flex-start;
-    }
-
-    .filters-bar {
-        flex-direction: column;
-    }
-
-    .search-box {
-        width: 100%;
-    }
-
-    .filter-select {
-        width: 100%;
-    }
-}
-</style>

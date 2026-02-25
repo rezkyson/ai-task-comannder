@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import axios from 'axios';
 
 const emit = defineEmits(['parsed']);
@@ -59,9 +59,13 @@ const handleKeydown = (e) => {
 </script>
 
 <template>
-    <div class="ai-input-wrapper">
-        <div class="ai-input-container" :class="{ 'is-loading': isLoading }">
-            <div class="ai-icon">
+    <div class="mb-6">
+        <!-- Input container -->
+        <div class="flex items-start gap-3 p-4 bg-gradient-to-br from-blue-50 to-violet-50 dark:from-indigo-500/10 dark:to-purple-500/10 border-2 border-indigo-200 dark:border-indigo-500/30 rounded-2xl transition-all focus-within:border-indigo-400 dark:focus-within:border-indigo-400 focus-within:shadow-[0_0_0_4px_rgba(129,140,248,0.15)]"
+            :class="{ 'opacity-70': isLoading }">
+            <!-- AI icon -->
+            <div
+                class="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
                     <path
@@ -70,10 +74,17 @@ const handleKeydown = (e) => {
                     <circle cx="15" cy="13" r="1" />
                 </svg>
             </div>
+
+            <!-- Textarea -->
             <textarea v-model="input" @keydown="handleKeydown"
                 :placeholder="'Ketik tugas dengan bahasa bebas... contoh: ' + currentHint" :disabled="isLoading"
-                rows="2" class="ai-textarea"></textarea>
-            <button @click="parseInput" :disabled="isLoading || !input.trim()" class="ai-submit-btn">
+                rows="2"
+                class="flex-1 border-none bg-transparent resize-none text-[0.95rem] leading-relaxed text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 outline-none font-[inherit]">
+            </textarea>
+
+            <!-- Submit button -->
+            <button @click="parseInput" :disabled="isLoading || !input.trim()"
+                class="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white cursor-pointer transition-all hover:scale-105 hover:shadow-lg hover:shadow-indigo-300 dark:hover:shadow-indigo-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none">
                 <svg v-if="!isLoading" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="w-5 h-5">
@@ -88,9 +99,11 @@ const handleKeydown = (e) => {
             </button>
         </div>
 
-        <div v-if="showHint" class="ai-hint">
+        <!-- Hint -->
+        <div v-if="showHint"
+            class="flex items-center gap-2 mt-3 px-3 py-2 text-xs text-indigo-500 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-500/5 rounded-lg">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 flex-shrink-0">
                 <circle cx="12" cy="12" r="10" />
                 <path d="M12 16v-4" />
                 <path d="M12 8h.01" />
@@ -98,123 +111,10 @@ const handleKeydown = (e) => {
             <span>AI akan otomatis mengisi judul, kategori, prioritas, dan deadline dari kalimat kamu</span>
         </div>
 
-        <div v-if="error" class="ai-error">
+        <!-- Error -->
+        <div v-if="error"
+            class="mt-3 px-3 py-2 text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 rounded-lg">
             {{ error }}
         </div>
     </div>
 </template>
-
-<style scoped>
-.ai-input-wrapper {
-    margin-bottom: 1.5rem;
-}
-
-.ai-input-container {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-    padding: 1rem;
-    background: linear-gradient(135deg, #eff6ff, #f5f3ff);
-    border: 2px solid #c7d2fe;
-    border-radius: 1rem;
-    transition: all 0.3s ease;
-}
-
-.ai-input-container:focus-within {
-    border-color: #818cf8;
-    box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.15);
-}
-
-.ai-input-container.is-loading {
-    opacity: 0.7;
-}
-
-.ai-icon {
-    flex-shrink: 0;
-    width: 2.5rem;
-    height: 2.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    border-radius: 0.75rem;
-    color: white;
-}
-
-.ai-textarea {
-    flex: 1;
-    border: none;
-    background: transparent;
-    resize: none;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    color: #1e293b;
-    outline: none;
-    font-family: inherit;
-}
-
-.ai-textarea::placeholder {
-    color: #94a3b8;
-}
-
-.ai-submit-btn {
-    flex-shrink: 0;
-    width: 2.5rem;
-    height: 2.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    border: none;
-    border-radius: 0.75rem;
-    color: white;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.ai-submit-btn:hover:not(:disabled) {
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
-}
-
-.ai-submit-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.ai-hint {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.75rem;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.8rem;
-    color: #6366f1;
-    background: rgba(99, 102, 241, 0.05);
-    border-radius: 0.5rem;
-}
-
-.ai-error {
-    margin-top: 0.75rem;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.85rem;
-    color: #dc2626;
-    background: #fef2f2;
-    border-radius: 0.5rem;
-    border: 1px solid #fecaca;
-}
-
-.animate-spin {
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-}
-</style>

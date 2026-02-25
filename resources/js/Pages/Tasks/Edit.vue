@@ -36,58 +36,64 @@ const deleteTask = () => {
 </script>
 
 <template>
+
     <Head :title="'Edit: ' + task.title" />
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="header-row">
-                <h2 class="page-title">Edit Tugas</h2>
-                <Link :href="route('tasks.index')" class="back-btn">
-                    ← Kembali
-                </Link>
+            <div class="flex justify-between items-center">
+                <h2 class="text-xl font-bold text-slate-800 dark:text-white">Edit Tugas</h2>
+                <Link :href="route('tasks.index')"
+                    class="text-sm font-medium text-indigo-500 hover:text-indigo-700 dark:hover:text-indigo-400">←
+                    Kembali</Link>
             </div>
         </template>
 
         <div class="py-6">
             <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-                <!-- Original Input Info -->
-                <div v-if="task.original_input" class="original-input-card">
-                    <div class="original-label">Input asli dari AI:</div>
-                    <div class="original-text">"{{ task.original_input }}"</div>
+                <!-- Original Input -->
+                <div v-if="task.original_input"
+                    class="bg-gradient-to-br from-blue-50 to-violet-50 dark:from-indigo-500/10 dark:to-purple-500/10 border border-indigo-200 dark:border-indigo-500/30 rounded-xl px-5 py-4 mb-5">
+                    <div
+                        class="text-xs font-semibold text-indigo-500 dark:text-indigo-400 uppercase tracking-wider mb-1">
+                        Input
+                        asli dari AI:</div>
+                    <div class="text-sm text-indigo-700 dark:text-indigo-300 italic">"{{ task.original_input }}"</div>
                 </div>
 
                 <!-- Edit Form -->
-                <form @submit.prevent="submit" class="section-card">
-                    <div class="form-grid">
-                        <!-- Title -->
-                        <div class="form-group full-width">
-                            <label class="form-label">Judul Tugas <span class="required">*</span></label>
-                            <input v-model="form.title" type="text" class="form-input" required />
-                            <p v-if="form.errors.title" class="form-error">{{ form.errors.title }}</p>
+                <form @submit.prevent="submit"
+                    class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="sm:col-span-2 flex flex-col gap-1.5">
+                            <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Judul Tugas <span
+                                    class="text-red-500">*</span></label>
+                            <input v-model="form.title" type="text" required
+                                class="w-full px-3.5 py-2.5 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:border-indigo-400 dark:focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all" />
+                            <p v-if="form.errors.title" class="text-xs text-red-500">{{ form.errors.title }}</p>
                         </div>
 
-                        <!-- Description -->
-                        <div class="form-group full-width">
-                            <label class="form-label">Deskripsi</label>
-                            <textarea v-model="form.description" class="form-input" rows="3"></textarea>
-                            <p v-if="form.errors.description" class="form-error">{{ form.errors.description }}</p>
+                        <div class="sm:col-span-2 flex flex-col gap-1.5">
+                            <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Deskripsi</label>
+                            <textarea v-model="form.description" rows="3"
+                                class="w-full px-3.5 py-2.5 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:border-indigo-400 dark:focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all font-[inherit] resize-none"></textarea>
+                            <p v-if="form.errors.description" class="text-xs text-red-500">{{ form.errors.description }}
+                            </p>
                         </div>
 
-                        <!-- Category -->
-                        <div class="form-group">
-                            <label class="form-label">Kategori</label>
-                            <select v-model="form.category_id" class="form-input">
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Kategori</label>
+                            <select v-model="form.category_id"
+                                class="w-full px-3.5 py-2.5 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none cursor-pointer">
                                 <option value="">Pilih Kategori</option>
-                                <option v-for="cat in categories" :key="cat.id" :value="cat.id">
-                                    {{ cat.name }}
-                                </option>
+                                <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
                             </select>
                         </div>
 
-                        <!-- Priority -->
-                        <div class="form-group">
-                            <label class="form-label">Prioritas</label>
-                            <select v-model="form.priority" class="form-input">
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Prioritas</label>
+                            <select v-model="form.priority"
+                                class="w-full px-3.5 py-2.5 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none cursor-pointer">
                                 <option value="low">🟢 Rendah</option>
                                 <option value="medium">🟡 Sedang</option>
                                 <option value="high">🟠 Tinggi</option>
@@ -95,10 +101,10 @@ const deleteTask = () => {
                             </select>
                         </div>
 
-                        <!-- Status -->
-                        <div class="form-group">
-                            <label class="form-label">Status</label>
-                            <select v-model="form.status" class="form-input">
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Status</label>
+                            <select v-model="form.status"
+                                class="w-full px-3.5 py-2.5 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none cursor-pointer">
                                 <option value="pending">Belum Mulai</option>
                                 <option value="in_progress">Sedang Dikerjakan</option>
                                 <option value="completed">Selesai</option>
@@ -106,27 +112,33 @@ const deleteTask = () => {
                             </select>
                         </div>
 
-                        <!-- Deadline -->
-                        <div class="form-group">
-                            <label class="form-label">Deadline</label>
-                            <input v-model="form.deadline" type="datetime-local" class="form-input" />
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Deadline</label>
+                            <input v-model="form.deadline" type="datetime-local"
+                                class="w-full px-3.5 py-2.5 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none transition-all" />
                         </div>
                     </div>
 
                     <!-- Actions -->
-                    <div class="form-actions">
-                        <button type="button" @click="deleteTask" class="delete-btn">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
-                                <path d="M3 6h18"/>
-                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
-                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                    <div
+                        class="flex flex-col sm:flex-row justify-between items-center gap-3 mt-6 pt-5 border-t border-slate-100 dark:border-slate-700">
+                        <button type="button" @click="deleteTask"
+                            class="inline-flex items-center gap-1.5 px-4 py-2 bg-white dark:bg-slate-700 text-red-500 border border-red-200 dark:border-red-500/30 rounded-xl text-sm cursor-pointer hover:bg-red-50 dark:hover:bg-red-500/10 transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="w-4 h-4">
+                                <path d="M3 6h18" />
+                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
                             </svg>
                             Hapus
                         </button>
-                        <div class="form-actions-right">
-                            <Link :href="route('tasks.index')" class="cancel-btn">Batal</Link>
-                            <button type="submit" :disabled="form.processing" class="submit-btn">
+                        <div class="flex gap-3">
+                            <Link :href="route('tasks.index')"
+                                class="px-5 py-2.5 bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600 rounded-xl text-sm hover:bg-slate-100 dark:hover:bg-slate-600 transition-all">
+                                Batal</Link>
+                            <button type="submit" :disabled="form.processing"
+                                class="px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-sm font-semibold rounded-xl hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-200 dark:hover:shadow-indigo-900/50 transition-all disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none">
                                 {{ form.processing ? 'Menyimpan...' : 'Simpan Perubahan' }}
                             </button>
                         </div>
@@ -136,192 +148,3 @@ const deleteTask = () => {
         </div>
     </AuthenticatedLayout>
 </template>
-
-<style scoped>
-.header-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.page-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #1e293b;
-}
-
-.back-btn {
-    color: #6366f1;
-    font-size: 0.875rem;
-    font-weight: 500;
-    text-decoration: none;
-}
-
-.back-btn:hover {
-    color: #4f46e5;
-}
-
-.original-input-card {
-    background: linear-gradient(135deg, #eff6ff, #f5f3ff);
-    border: 1px solid #c7d2fe;
-    border-radius: 0.75rem;
-    padding: 1rem 1.25rem;
-    margin-bottom: 1.25rem;
-}
-
-.original-label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #6366f1;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.25rem;
-}
-
-.original-text {
-    font-size: 0.9rem;
-    color: #4338ca;
-    font-style: italic;
-}
-
-.section-card {
-    background: white;
-    border: 1px solid #e2e8f0;
-    border-radius: 1rem;
-    padding: 1.5rem;
-}
-
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-}
-
-.full-width {
-    grid-column: 1 / -1;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
-}
-
-.form-label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #374151;
-}
-
-.required {
-    color: #ef4444;
-}
-
-.form-input {
-    padding: 0.625rem 0.875rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.625rem;
-    font-size: 0.875rem;
-    outline: none;
-    transition: all 0.2s ease;
-    background: white;
-    width: 100%;
-    font-family: inherit;
-}
-
-.form-input:focus {
-    border-color: #818cf8;
-    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15);
-}
-
-.form-error {
-    font-size: 0.75rem;
-    color: #dc2626;
-    margin: 0;
-}
-
-.form-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 1.5rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid #f1f5f9;
-}
-
-.form-actions-right {
-    display: flex;
-    gap: 0.75rem;
-}
-
-.delete-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.375rem;
-    padding: 0.5rem 1rem;
-    background: white;
-    color: #dc2626;
-    border: 1px solid #fecaca;
-    border-radius: 0.625rem;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.delete-btn:hover {
-    background: #fef2f2;
-}
-
-.cancel-btn {
-    padding: 0.625rem 1.25rem;
-    background: #f8fafc;
-    color: #64748b;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.625rem;
-    font-size: 0.875rem;
-    text-decoration: none;
-    transition: all 0.2s ease;
-}
-
-.cancel-btn:hover {
-    background: #f1f5f9;
-}
-
-.submit-btn {
-    padding: 0.625rem 1.5rem;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    color: white;
-    border: none;
-    border-radius: 0.625rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.submit-btn:hover:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
-}
-
-.submit-btn:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-}
-
-@media (max-width: 640px) {
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .form-actions {
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-
-    .form-actions-right {
-        width: 100%;
-        justify-content: flex-end;
-    }
-}
-</style>

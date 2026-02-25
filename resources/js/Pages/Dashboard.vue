@@ -58,7 +58,7 @@ const priorityColors = {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-xl font-bold text-gray-800">Dashboard</h2>
+            <h2 class="text-xl font-bold text-gray-800 dark:text-white">Dashboard</h2>
         </template>
 
         <div class="py-6">
@@ -66,20 +66,20 @@ const priorityColors = {
 
                 <!-- Greeting -->
                 <div class="mb-6">
-                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">
                         Halo, <span
                             class="bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">{{
                             userName }}</span>! 👋
                     </h1>
-                    <p class="text-gray-500 text-sm mt-1">Berikut ringkasan tugas kamu hari ini.</p>
+                    <p class="text-gray-500 dark:text-slate-400 text-sm mt-1">Berikut ringkasan tugas kamu hari ini.</p>
                 </div>
 
                 <!-- Stats Cards -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
-                    <!-- Total -->
                     <div
-                        class="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-3.5 hover:border-indigo-200 hover:shadow-sm transition-all">
-                        <div class="w-11 h-11 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+                        class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-4 flex items-center gap-3.5 hover:border-indigo-200 dark:hover:border-indigo-500/30 hover:shadow-sm transition-all">
+                        <div
+                            class="w-11 h-11 rounded-lg bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center flex-shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#3b82f6"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
                                 <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
@@ -87,15 +87,17 @@ const priorityColors = {
                             </svg>
                         </div>
                         <div class="flex flex-col">
-                            <span class="text-2xl font-extrabold text-gray-800 leading-tight">{{ stats.total }}</span>
-                            <span class="text-xs text-gray-400 font-medium">Total Tugas</span>
+                            <span class="text-2xl font-extrabold text-gray-800 dark:text-white leading-tight">{{
+                                stats.total
+                                }}</span>
+                            <span class="text-xs text-gray-400 dark:text-slate-500 font-medium">Total Tugas</span>
                         </div>
                     </div>
 
-                    <!-- Completed -->
                     <div
-                        class="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-3.5 hover:border-indigo-200 hover:shadow-sm transition-all">
-                        <div class="w-11 h-11 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
+                        class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-4 flex items-center gap-3.5 hover:border-indigo-200 dark:hover:border-indigo-500/30 hover:shadow-sm transition-all">
+                        <div
+                            class="w-11 h-11 rounded-lg bg-green-50 dark:bg-green-500/10 flex items-center justify-center flex-shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#16a34a"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
                                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
@@ -103,16 +105,17 @@ const priorityColors = {
                             </svg>
                         </div>
                         <div class="flex flex-col">
-                            <span class="text-2xl font-extrabold text-gray-800 leading-tight">{{ stats.completed
+                            <span class="text-2xl font-extrabold text-gray-800 dark:text-white leading-tight">{{
+                                stats.completed
                                 }}</span>
-                            <span class="text-xs text-gray-400 font-medium">Selesai</span>
+                            <span class="text-xs text-gray-400 dark:text-slate-500 font-medium">Selesai</span>
                         </div>
                     </div>
 
-                    <!-- Pending -->
                     <div
-                        class="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-3.5 hover:border-indigo-200 hover:shadow-sm transition-all">
-                        <div class="w-11 h-11 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0">
+                        class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-4 flex items-center gap-3.5 hover:border-indigo-200 dark:hover:border-indigo-500/30 hover:shadow-sm transition-all">
+                        <div
+                            class="w-11 h-11 rounded-lg bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center flex-shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#d97706"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
                                 <circle cx="12" cy="12" r="10" />
@@ -120,15 +123,17 @@ const priorityColors = {
                             </svg>
                         </div>
                         <div class="flex flex-col">
-                            <span class="text-2xl font-extrabold text-gray-800 leading-tight">{{ stats.pending }}</span>
-                            <span class="text-xs text-gray-400 font-medium">Belum Mulai</span>
+                            <span class="text-2xl font-extrabold text-gray-800 dark:text-white leading-tight">{{
+                                stats.pending
+                                }}</span>
+                            <span class="text-xs text-gray-400 dark:text-slate-500 font-medium">Belum Mulai</span>
                         </div>
                     </div>
 
-                    <!-- Overdue -->
                     <div
-                        class="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-3.5 hover:border-indigo-200 hover:shadow-sm transition-all">
-                        <div class="w-11 h-11 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
+                        class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-4 flex items-center gap-3.5 hover:border-indigo-200 dark:hover:border-indigo-500/30 hover:shadow-sm transition-all">
+                        <div
+                            class="w-11 h-11 rounded-lg bg-red-50 dark:bg-red-500/10 flex items-center justify-center flex-shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#dc2626"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
                                 <path
@@ -138,19 +143,23 @@ const priorityColors = {
                             </svg>
                         </div>
                         <div class="flex flex-col">
-                            <span class="text-2xl font-extrabold text-gray-800 leading-tight">{{ stats.overdue }}</span>
-                            <span class="text-xs text-gray-400 font-medium">Terlewat</span>
+                            <span class="text-2xl font-extrabold text-gray-800 dark:text-white leading-tight">{{
+                                stats.overdue
+                                }}</span>
+                            <span class="text-xs text-gray-400 dark:text-slate-500 font-medium">Terlewat</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Completion Progress -->
-                <div v-if="stats.total > 0" class="bg-white border border-gray-200 rounded-xl px-5 py-4 mb-5">
+                <div v-if="stats.total > 0"
+                    class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl px-5 py-4 mb-5">
                     <div class="flex justify-between items-center mb-2">
-                        <span class="text-sm font-semibold text-gray-700">Progress Keseluruhan</span>
+                        <span class="text-sm font-semibold text-gray-700 dark:text-slate-200">Progress
+                            Keseluruhan</span>
                         <span class="text-sm font-bold text-indigo-500">{{ completionRate }}%</span>
                     </div>
-                    <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div class="w-full h-2 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden">
                         <div class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-500"
                             :style="{ width: completionRate + '%' }"></div>
                     </div>
@@ -159,18 +168,19 @@ const priorityColors = {
                 <!-- Content Grid -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
                     <!-- Upcoming Tasks -->
-                    <div class="bg-white border border-gray-200 rounded-xl p-5">
+                    <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-5">
                         <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-sm font-bold text-gray-800">⏰ Deadline Terdekat</h3>
+                            <h3 class="text-sm font-bold text-gray-800 dark:text-white">⏰ Deadline Terdekat</h3>
                             <Link :href="route('tasks.index')"
-                                class="text-xs text-indigo-500 font-medium hover:text-indigo-700">Lihat Semua →</Link>
+                                class="text-xs text-indigo-500 font-medium hover:text-indigo-700 dark:hover:text-indigo-400">
+                                Lihat Semua →</Link>
                         </div>
                         <div v-if="upcomingTasks && upcomingTasks.length > 0" class="flex flex-col gap-3">
                             <div v-for="task in upcomingTasks" :key="task.id"
-                                class="flex justify-between items-center py-2.5 border-b border-gray-50 last:border-b-0 last:pb-0">
+                                class="flex justify-between items-center py-2.5 border-b border-gray-50 dark:border-slate-700/50 last:border-b-0 last:pb-0">
                                 <div class="flex-1 min-w-0">
                                     <Link :href="route('tasks.edit', task.id)"
-                                        class="text-sm font-semibold text-gray-800 hover:text-indigo-500 block truncate">
+                                        class="text-sm font-semibold text-gray-800 dark:text-slate-200 hover:text-indigo-500 dark:hover:text-indigo-400 block truncate">
                                         {{ task.title }}
                                     </Link>
                                     <div class="flex gap-2 text-xs mt-0.5">
@@ -184,55 +194,62 @@ const priorityColors = {
                                     </div>
                                 </div>
                                 <div class="text-right flex-shrink-0 ml-4">
-                                    <span class="block text-xs font-semibold text-amber-600">{{
+                                    <span class="block text-xs font-semibold text-amber-600 dark:text-amber-400">{{
                                         formatRelativeDate(task.deadline) }}</span>
-                                    <span class="block text-xs text-gray-400">{{ formatDate(task.deadline) }}</span>
+                                    <span class="block text-xs text-gray-400 dark:text-slate-500">{{
+                                        formatDate(task.deadline)
+                                        }}</span>
                                 </div>
                             </div>
                         </div>
-                        <div v-else class="text-center py-6 text-gray-400 text-sm">
+                        <div v-else class="text-center py-6 text-gray-400 dark:text-slate-500 text-sm">
                             <p>Tidak ada deadline mendatang 🎉</p>
                         </div>
                     </div>
 
                     <!-- Tasks by Category -->
-                    <div class="bg-white border border-gray-200 rounded-xl p-5">
+                    <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-5">
                         <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-sm font-bold text-gray-800">📊 Tugas per Kategori</h3>
+                            <h3 class="text-sm font-bold text-gray-800 dark:text-white">📊 Tugas per Kategori</h3>
                         </div>
                         <div v-if="tasksByCategory && tasksByCategory.length > 0" class="flex flex-col gap-3">
                             <div v-for="cat in tasksByCategory" :key="cat.name" class="flex items-center gap-3">
                                 <div class="flex items-center gap-2 w-24 flex-shrink-0">
                                     <span class="w-2 h-2 rounded-full flex-shrink-0"
                                         :style="{ backgroundColor: cat.color }"></span>
-                                    <span class="text-xs text-gray-500 font-medium truncate">{{ cat.name }}</span>
+                                    <span class="text-xs text-gray-500 dark:text-slate-400 font-medium truncate">{{
+                                        cat.name
+                                        }}</span>
                                 </div>
                                 <div class="flex-1 flex items-center gap-2">
                                     <div class="h-5 rounded-md min-w-[4px] transition-all duration-300" :style="{
                                         width: (cat.count / maxCategoryCount * 100) + '%',
                                         backgroundColor: cat.color
                                     }"></div>
-                                    <span class="text-xs font-bold text-gray-700 min-w-[1.5rem]">{{ cat.count }}</span>
+                                    <span class="text-xs font-bold text-gray-700 dark:text-slate-300 min-w-[1.5rem]">{{
+                                        cat.count }}</span>
                                 </div>
                             </div>
                         </div>
-                        <div v-else class="text-center py-6 text-gray-400 text-sm">
+                        <div v-else class="text-center py-6 text-gray-400 dark:text-slate-500 text-sm">
                             <p>Belum ada tugas dengan kategori</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Recent Tasks -->
-                <div class="bg-white border border-gray-200 rounded-xl p-5 mt-5">
+                <div
+                    class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl p-5 mt-5">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-sm font-bold text-gray-800">🕐 Tugas Terbaru</h3>
+                        <h3 class="text-sm font-bold text-gray-800 dark:text-white">🕐 Tugas Terbaru</h3>
                         <Link :href="route('tasks.create')"
-                            class="text-xs text-indigo-500 font-medium hover:text-indigo-700">+
+                            class="text-xs text-indigo-500 font-medium hover:text-indigo-700 dark:hover:text-indigo-400">
+                            +
                             Tambah Tugas</Link>
                     </div>
                     <div v-if="recentTasks && recentTasks.length > 0" class="flex flex-col">
                         <div v-for="task in recentTasks" :key="task.id"
-                            class="flex items-center gap-3 py-2.5 border-b border-gray-50 last:border-b-0 last:pb-0">
+                            class="flex items-center gap-3 py-2.5 border-b border-gray-50 dark:border-slate-700/50 last:border-b-0 last:pb-0">
                             <span class="w-2 h-2 rounded-full flex-shrink-0" :class="{
                                 'bg-yellow-400': task.status === 'pending',
                                 'bg-blue-500': task.status === 'in_progress',
@@ -241,10 +258,12 @@ const priorityColors = {
                             }"></span>
                             <div class="flex-1 min-w-0">
                                 <Link :href="route('tasks.edit', task.id)"
-                                    class="text-sm font-semibold text-gray-800 hover:text-indigo-500 block truncate">
+                                    class="text-sm font-semibold text-gray-800 dark:text-slate-200 hover:text-indigo-500 dark:hover:text-indigo-400 block truncate">
                                     {{ task.title }}
                                 </Link>
-                                <span class="text-xs text-gray-400">Dibuat {{ formatDate(task.created_at) }}</span>
+                                <span class="text-xs text-gray-400 dark:text-slate-500">Dibuat {{
+                                    formatDate(task.created_at)
+                                    }}</span>
                             </div>
                             <span v-if="task.category" class="text-xs font-semibold flex-shrink-0"
                                 :style="{ color: task.category.color }">
@@ -252,7 +271,7 @@ const priorityColors = {
                             </span>
                         </div>
                     </div>
-                    <div v-else class="text-center py-6 text-gray-400 text-sm">
+                    <div v-else class="text-center py-6 text-gray-400 dark:text-slate-500 text-sm">
                         <p>Belum ada tugas.
                             <Link :href="route('tasks.create')" class="text-indigo-500 font-semibold">Buat sekarang!
                             </Link>
