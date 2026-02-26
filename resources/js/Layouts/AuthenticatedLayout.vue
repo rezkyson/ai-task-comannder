@@ -49,13 +49,9 @@ const closeProfileMenu = () => showProfileMenu.value = false;
 
                         <div class="flex items-center gap-6">
                             <!-- Logo -->
-                            <Link :href="route('dashboard')" class="flex items-center gap-2">
-                                <div class="w-7 h-7 rounded-md bg-violet-600 flex items-center justify-center">
-                                    <svg viewBox="0 0 16 16" fill="none" class="w-3.5 h-3.5">
-                                        <path d="M3 8.5L6.5 12L13 4" stroke="white" stroke-width="2.5"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                </div>
+                            <Link :href="route('dashboard')" class="flex items-center gap-0">
+                                <img src="/logo.png" alt="TaskCommander"
+                                    class="w-9 h-9 object-contain rounded-md -ml-2 mt-0.5" />
                                 <span
                                     class="font-semibold text-sm text-gray-900 dark:text-white tracking-tight hidden sm:block">TaskCommander</span>
                             </Link>

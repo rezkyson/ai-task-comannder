@@ -34,13 +34,8 @@ defineProps({
         <nav
             class="sticky top-0 z-40 bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg border-b border-gray-100 dark:border-gray-800">
             <div class="mx-auto max-w-5xl px-4 sm:px-6 h-14 flex items-center justify-between">
-                <Link href="/" class="flex items-center gap-2">
-                    <div class="w-7 h-7 rounded-md bg-violet-600 flex items-center justify-center">
-                        <svg viewBox="0 0 16 16" fill="none" class="w-3.5 h-3.5">
-                            <path d="M3 8.5L6.5 12L13 4" stroke="white" stroke-width="2.5" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        </svg>
-                    </div>
+                <Link href="/" class="flex items-center gap-0">
+                    <img src="/logo.png" alt="TaskCommander" class="w-10 h-10 object-contain rounded-md -ml-2 mt-1" />
                     <span
                         class="font-semibold text-sm text-gray-900 dark:text-white tracking-tight">TaskCommander</span>
                 </Link>
@@ -301,12 +296,7 @@ defineProps({
         <footer class="relative py-8 px-4 sm:px-6 border-t border-gray-100 dark:border-gray-800">
             <div class="mx-auto max-w-5xl flex flex-col sm:flex-row items-center justify-between gap-3">
                 <div class="flex items-center gap-2">
-                    <div class="w-5 h-5 rounded bg-violet-600 flex items-center justify-center">
-                        <svg viewBox="0 0 16 16" fill="none" class="w-2.5 h-2.5">
-                            <path d="M3 8.5L6.5 12L13 4" stroke="white" stroke-width="2.5" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        </svg>
-                    </div>
+                    <img src="/logo.png" alt="TaskCommander" class="w-8 h-8 object-contain rounded" />
                     <span class="text-xs text-gray-400 dark:text-gray-500">TaskCommander</span>
                 </div>
                 <p class="text-xs text-gray-400 dark:text-gray-600">Dibangun dengan Laravel, Vue, dan Gemini AI</p>
