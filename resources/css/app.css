@@ -8,22 +8,32 @@
         -moz-osx-font-smoothing: grayscale;
     }
 
-    html, body {
+    html,
+    body {
         transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    /* Subtle custom scrollbar */
     ::-webkit-scrollbar {
         width: 6px;
     }
+
     ::-webkit-scrollbar-track {
         background: transparent;
     }
+
     ::-webkit-scrollbar-thumb {
         background: #cbd5e1;
         border-radius: 3px;
     }
+
     .dark ::-webkit-scrollbar-thumb {
         background: #475569;
+    }
+}
+
+@layer utilities {
+    .bg-dot-pattern {
+        background-image: radial-gradient(circle, #94a3b8 0.5px, transparent 0.5px);
+        background-size: 24px 24px;
     }
 }

@@ -33,7 +33,18 @@ function clearFilters() {
     router.get(route('tasks.index'));
 }
 
-const toggleComplete = (id) => router.patch(route('tasks.toggle-complete', id), {}, { preserveScroll: true });
+const toggleComplete = (id) => {
+    const task = props.tasks.data.find(t => t.id === id);
+    if (task) {
+        const prev = task.status;
+        task.status = prev === 'completed' ? 'pending' : 'completed';
+        router.patch(route('tasks.toggle-complete', id), {}, {
+            preserveScroll: true,
+            preserveState: true,
+            onError: () => { task.status = prev; },
+        });
+    }
+};
 const hasFilters = () => search.value || status.value || categoryId.value || priority.value;
 </script>
 
@@ -41,17 +52,6 @@ const hasFilters = () => search.value || status.value || categoryId.value || pri
 
     <Head title="Tugas Saya" />
     <AuthenticatedLayout>
-        <template #header>
-            <div class="flex items-center justify-between">
-                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Tugas</h2>
-                <Link :href="route('tasks.create')"
-                    class="flex items-center gap-1 px-3 py-1.5 rounded-md bg-violet-600 hover:bg-violet-700 text-white text-[13px] font-medium transition-colors">
-                    <Plus :size="14" :stroke-width="2.5" />
-                    Buat Tugas
-                </Link>
-            </div>
-        </template>
-
         <div class="py-5">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 

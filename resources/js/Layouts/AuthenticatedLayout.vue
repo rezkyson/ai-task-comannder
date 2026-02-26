@@ -23,7 +23,24 @@ const closeProfileMenu = () => showProfileMenu.value = false;
 <template>
     <div>
         <FlashMessage />
-        <div class="min-h-screen bg-gray-50/50 dark:bg-gray-950 transition-colors duration-200">
+        <div
+            class="min-h-screen bg-[#f8f9fc] dark:bg-gray-950 transition-colors duration-200 relative overflow-x-hidden">
+
+            <!-- Decorative background blobs -->
+            <div class="fixed inset-0 pointer-events-none" aria-hidden="true">
+                <div
+                    class="absolute -top-32 -right-32 w-[600px] h-[600px] rounded-full bg-violet-400/15 dark:bg-violet-500/[0.07] blur-[100px]">
+                </div>
+                <div
+                    class="absolute top-[40%] -left-24 w-[500px] h-[500px] rounded-full bg-sky-400/10 dark:bg-sky-500/[0.05] blur-[100px]">
+                </div>
+                <div
+                    class="absolute bottom-0 right-[20%] w-[400px] h-[400px] rounded-full bg-fuchsia-400/10 dark:bg-fuchsia-500/[0.05] blur-[100px]">
+                </div>
+            </div>
+            <!-- Dot pattern overlay -->
+            <div class="fixed inset-0 bg-dot-pattern opacity-[0.4] dark:opacity-[0.06] pointer-events-none"
+                aria-hidden="true"></div>
 
             <nav
                 class="sticky top-0 z-40 bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg border-b border-gray-100 dark:border-gray-800">
@@ -63,7 +80,7 @@ const closeProfileMenu = () => showProfileMenu.value = false;
                             <Link :href="route('tasks.create')"
                                 class="hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-md bg-violet-600 hover:bg-violet-700 text-white text-[13px] font-medium transition-colors">
                                 <Plus :size="14" :stroke-width="2.5" />
-                                <span>Buat</span>
+                                <span>Tambah Tugas</span>
                             </Link>
 
                             <!-- Profile -->
